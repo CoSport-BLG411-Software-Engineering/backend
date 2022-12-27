@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <form action="" method="post">
+      <div class="container">
+        <h1>You can select a gym.</h1>
+        <h1>Choose what you want!</h1>
+        <br><br>
+        <select id ="standart-select"  name="gymSelection" class="Input">
+          {% for gym in userGyms %}
+            <option value="{{ gym['gymID'] }}">{{ gym['gymName'] }}</option>
+          {% endfor %}
+          </select>
+          <div>
+            <button type="Submit">Select</button>
+          </div>
+      </div>
+    </form>
+  </body>
+</html>

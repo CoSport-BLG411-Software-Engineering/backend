@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>MANAGER PROFILE PAGE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <form action="{{url_for('managerProfile')}}" method="post">
+      {% for i in range( activeManager.keys() | length ) %}
+        <br>
+        {% if activeManager.keys()[i] != "managerID"
+        and activeManager.keys()[i] != "chain_ID"  %}
+          <h3>{{ activeManager.keys()[i]}}</h3>
+          <textarea name="activeManagerFeatures"
+                    placeholder= {{activeManager.keys()[i]}}
+                    rows="1"
+                    cols="15"
+                    >{{ activeManager[i] }}</textarea>
+          <br>
+        {% else %}
+          <h3>{{ activeManager.keys()[i]}}</h3>
+          <textarea name="activeManagerFeatures"
+          placeholder= {{activeManager.keys()[i]}}
+          rows="1"
+          cols="15"
+          readonly>{{ activeManager[i] }}</textarea>
+        {%endif%}
+      {% endfor %}
+      <br>
+      <button type="submit" class="button-5">Save</button>
+    </form>
+  </body>
+</html>

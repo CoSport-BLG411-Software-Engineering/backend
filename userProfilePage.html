@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>USER PROFILE PAGE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <form action="{{url_for('userProfile')}}" method="post">
+      {% for i in range( activeUser.keys() | length ) %}
+        <br>
+        {% if activeUser.keys()[i] != "u_age" and activeUser.keys()[i] != "userID"
+        and activeUser.keys()[i] != "chain_ID"  %}
+          <h3>{{ activeUser.keys()[i]}}</h3>
+          <textarea name="activeUserFeatures"
+                    placeholder= {{activeUser.keys()[i]}}
+                    rows="1"
+                    cols="15"
+                    >{{ activeUser[i] }}</textarea>
+          <br>
+        {% elif activeUser.keys()[i] == "u_age" %}
+          <h3>{{ activeUser.keys()[i]}}</h3>
+          <input type="number" placeholder="{{ activeUser[i] }} " name="activeUserFeatures" value="{{
+            activeUser.keys()[i] }}">
+        {% elif activeUser.keys()[i] == "userID" %}
+          <h3>{{ activeUser.keys()[i]}}</h3>
+          <textarea name="activeUserFeatures"
+          placeholder= {{activeUser.keys()[i]}}
+          rows="1"
+          cols="15"
+          readonly>{{ activeUser[i] }}</textarea>
+        {%endif%}
+      {% endfor %}
+      <br>
+      <button type="submit" class="button-5">Save</button>
+    </form>
+  </body>
+</html>
