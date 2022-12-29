@@ -29,6 +29,6 @@ jobs:
           paths:
             - node_modules
           key: dependencies-node-{{ checksum "package.json" }}
-- run:
-    name: Deploy application
-    command: sls deploy -v
+  - run:
+      name: Deploy application
+      command: sls deploy -v
