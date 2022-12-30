@@ -3,15 +3,16 @@ from flask import Flask, render_template, redirect, url_for, request
 import models as dbHandler
 
 
+
 app = Flask(__name__)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
 
 @app.route('/')
 def homePage():
-    conn = dbHandler.get_db_connection()
-    conn.close()
+    session = dbHandler.loadSession()
+    session.close()
 
     return render_template("base.html")
 
@@ -54,10 +55,10 @@ def userSignup():
 
         users = dbHandler.retrieveUsers()
 
-        conn = dbHandler.get_db_connection()
-        account = conn.execute('SELECT * FROM userTable WHERE userName = "' + userName + '"' ).fetchone()
-        conn.commit()
-        conn.close()
+        session = dbHandler.loadSession()
+        account = session.execute('SELECT * FROM userTable WHERE userName = "' + userName + '"' ).fetchone()
+        session.commit()
+        session.close()
 
         if account:
                 print("Account already exists !")
@@ -93,7 +94,7 @@ def managerLogin():
     return render_template('managerLogin.html', error=error)
 
 @app.route('/web/managerSignup', methods=['GET', 'POST'])
-def managerSignup():
+def managerSignup():#updated
     if request.method == 'POST' and 'managerUsername' in request.form and 'managerPassword' in request.form:
         managerUsername = request.form['managerUsername']
         managerPassword = request.form['managerPassword']
@@ -101,10 +102,10 @@ def managerSignup():
 
         managers = dbHandler.retrieveManagers()
 
-        conn = dbHandler.get_db_connection()
-        account = conn.execute('SELECT * FROM managerTable WHERE managerUsername = "' + managerUsername + '"' ).fetchone()
-        conn.commit()
-        conn.close()
+        session = dbHandler.loadSession()
+        account = session.execute('SELECT * FROM managerTable WHERE managerUsername = "' + managerUsername + '"' ).fetchone()
+        session.commit()
+        session.close()
         
         print("lets add manager")
 
