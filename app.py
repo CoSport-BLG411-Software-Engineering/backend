@@ -6,7 +6,7 @@ import models as dbHandler
 app = Flask(__name__)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
 
 @app.route('/')
 def homePage():
