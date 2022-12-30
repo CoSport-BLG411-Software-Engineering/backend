@@ -32,3 +32,8 @@ jobs:
       - run:
           name: Deploy application
           command: sls deploy -v
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy
