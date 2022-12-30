@@ -1,20 +1,190 @@
 import sqlite3
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+"""def loadSession():
+    session = sqlite3.sessionect('database.db')
+    session.row_factory = sqlite3.Row
+    return session"""
+
+engine = create_engine('sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
+Base = declarative_base(engine)
+
+class User(Base):
+    """"""
+    __tablename__ = 'userTable'
+    
+    u_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    surname = Column(String)
+    age = Column(Integer)
+    gender = Column(String)
+    chain_id = Column(Integer, ForeignKey("chainTable.chain_ID"))
+    username = Column(String)
+    password = Column(String)
+    
+    #----------------------------------------------------------------------
+    def __init__(self, u_id, name, surname, age, gender, chain_id, username, password):
+        """"""
+        self.u_id = u_id
+        self.name = name
+        self.surname = surname
+        self.age = age
+        self.gender = gender
+        self.chain_id = chain_id
+        self.username = username
+        self.password = password
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.u_id, self.name,
+                                                 self.surname)
+
+class Chain(Base):
+    """"""
+    __tablename__ = 'chainTable'
+    
+    c_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    gymnum = Column(Integer)
+    numofmembers = Column(Integer)
+
+    #----------------------------------------------------------------------
+    def __init__(self, c_id, name, gymnum, numofmembers):
+        """"""
+        self.c_id = c_id
+        self.name = name
+        self.gymnum = gymnum
+        self.numofmembers = numofmembers
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.c_id, self.name,
+                                                 self.name)
+
+class Gym(Base):
+    """"""
+    __tablename__ = 'gymTable'
+    
+    gym_id = Column(Integer, primary_key=True, autoincrement=True)
+    numofusers = Column(Integer)
+    name = Column(String)
+    o_time = Column(String)
+    c_time = Column(String)
+    chain_id = Column(Integer, ForeignKey("chainTable.chain_ID"))
+    
+    #----------------------------------------------------------------------
+    def __init__(self, gym_id, numofusers, name, o_time, c_time, chain_id):
+        """"""
+        self.gym_id = gym_id
+        self.numofusers = numofusers
+        self.name = name
+        self.o_time = o_time
+        self.c_time = c_time
+        self.chain_id = chain_id
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.gym_id, self.name,
+                                                 self.o_time)
+
+class Manager(Base):
+    """"""
+    __tablename__ = 'managerTable'
+    
+    m_id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(Integer)
+    password = Column(String)
+    gym_id = Column(Integer, ForeignKey("gymTable.gymID"))
+    
+    #----------------------------------------------------------------------
+    def __init__(self, m_id, username, password, gym_id):
+        """"""
+        self.m_id = m_id
+        self.username = username
+        self.password = password
+        self.gym_id = gym_id
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.m_id, self.username,
+                                                 self.password)
+
+class PT(Base):
+    """"""
+    __tablename__ = 'managerTable'
+    
+    pt_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    surname = Column(String)
+    age = Column(Integer)
+    gender = Column(String)
+    gym_id = Column(Integer, ForeignKey("gymTable.gymID"))
+    profession = Column(String)
+    
+    #----------------------------------------------------------------------
+    def __init__(self, pt_id, name, surname, age, gender, gym_id, profession):
+        """"""
+        self.pt_id = pt_id
+        self.name = name
+        self.surname = surname
+        self.age = age
+        self.gender = gender
+        self.gym_id = gym_id
+        self.profession = profession
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.pt_id, self.name,
+                                                 self.surname)
+
+class Facility(Base):
+    """"""
+    __tablename__ = 'managerTable'
+    
+    f_id = Column(Integer, primary_key=True, autoincrement=True)
+    facilityType = Column(String)
+    gym_id = Column(Integer, ForeignKey("gymTable.gymID"))
+    
+    #----------------------------------------------------------------------
+    def __init__(self, f_id, facilityType, gym_id):
+        """"""
+        self.f_id = f_id
+        self.facilityType = facilityType
+        self.gym_id = gym_id
+        
+    #----------------------------------------------------------------------
+    def __repr__(self):
+        """"""
+        return "<User -="" '%s':="" '%s'="">" % (self.f_id, self.name,
+                                                 self.surname)
+
+def loadSession():
+    """"""
+    metadata = Base.metadata
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    return session
+
+    
+    
 
 def retrieveUsers():
-    conn = get_db_connection()
-    users = conn.execute("SELECT * FROM userTable").fetchall()
-    conn.close()
+    session = loadSession()
+    users = session.execute("SELECT * FROM userTable").fetchall()
+    session.close()
 
     return users 
 
 def addUser(u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword):
-    conn = get_db_connection()
-    conn.execute('INSERT INTO userTable '
+    session = loadSession()
+    session.execute('INSERT INTO userTable '
     ' (u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword) VALUES ('
         + '"' + u_name + '" , '
         + '"' + u_surname + '" , '
@@ -23,53 +193,53 @@ def addUser(u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword
         + str(chain_ID) + ', '
         + '"' + userName + '" , '
         + '"' + userPassword + '") ')
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def retrieveManagers():
-    conn = get_db_connection()
-    users = conn.execute("SELECT * FROM managerTable").fetchall()
-    conn.close()
+    session = loadSession()
+    users = session.execute("SELECT * FROM managerTable").fetchall()
+    session.close()
 
     return users 
 
 def addManager(managerUsername, managerPassword, gymID):
-    conn = get_db_connection()
+    session = loadSession()
     print("adding manager ")
-    conn.execute('INSERT INTO managerTable '
+    session.execute('INSERT INTO managerTable '
     ' (managerUsername, managerPassword, gymID) VALUES ('
         + '"' + managerUsername + '" , '
         + '"' + managerPassword + '" ,' 
         + str(gymID) + ')')
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def getUserGyms(chain_ID):
-    conn = get_db_connection()
-    gyms = conn.execute(" SELECT gymTable.gymID, gymTable.gymName"
+    session = loadSession()
+    gyms = session.execute(" SELECT gymTable.gymID, gymTable.gymName"
             " FROM gymTable" 
             " INNER JOIN chainTable"
             " ON gymTable.chain_ID = chainTable.chain_ID"
             " WHERE chainTable.chain_ID = " + str(chain_ID)).fetchall()
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     return gyms
 
 def addActiveUser(user):
-    conn = get_db_connection()
+    session = loadSession()
 
-    values = conn.execute('SELECT * FROM userTable WHERE userName= "' + user + '"').fetchone()
-    conn.commit()
+    values = session.execute('SELECT * FROM userTable WHERE userName= "' + user + '"').fetchone()
+    session.commit()
 
     for value in values:
         print(value)
 
-    conn.execute('DELETE FROM activeUserTable').fetchall()
-    conn.commit()
+    session.execute('DELETE FROM activeUserTable').fetchall()
+    session.commit()
 
-    conn.execute('INSERT INTO activeUserTable VALUES ('
+    session.execute('INSERT INTO activeUserTable VALUES ('
         + str(values[0]) + ', '
         + '"' + values[1] + '" , '
         + '"' + values[2] + '" , '
@@ -79,90 +249,90 @@ def addActiveUser(user):
         + '"' + values[6] + '" , '
         + '"' + values[7]  + '")' )
         
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def addActiveManager(manager):
-    conn = get_db_connection()
+    session = loadSession()
 
-    values = conn.execute('SELECT * FROM managerTable WHERE managerUsername= "' + manager + '"').fetchone()
-    conn.commit()
+    values = session.execute('SELECT * FROM managerTable WHERE managerUsername= "' + manager + '"').fetchone()
+    session.commit()
 
     for value in values:
         print(value)
 
-    conn.execute('DELETE FROM activeManagerTable').fetchall()
-    conn.commit()
+    session.execute('DELETE FROM activeManagerTable').fetchall()
+    session.commit()
 
-    conn.execute('INSERT INTO activeManagerTable VALUES ('
+    session.execute('INSERT INTO activeManagerTable VALUES ('
         + str(values[0]) + ', '
         + '"' + values[1] + '" , '
         + '"' + values[2] + '" , '
         + str(values[3]) + ')')
         
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def getActiveUser():
-    conn = get_db_connection()
-    activeUser = conn.execute('SELECT * FROM activeUserTable').fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    activeUser = session.execute('SELECT * FROM activeUserTable').fetchall()
+    session.commit()
+    session.close()
 
     return activeUser
 
 def getActiveManager():
-    conn = get_db_connection()
-    activeManager = conn.execute('SELECT * FROM activeManagerTable').fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    activeManager = session.execute('SELECT * FROM activeManagerTable').fetchall()
+    session.commit()
+    session.close()
 
     return activeManager
 
 def getGym(gymID):
-    conn = get_db_connection()
-    selectedGym = conn.execute('SELECT * FROM gymTable WHERE gymID =' + str(gymID)).fetchone()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    selectedGym = session.execute('SELECT * FROM gymTable WHERE gymID =' + str(gymID)).fetchone()
+    session.commit()
+    session.close()
 
     return selectedGym
 
 def getPersonalTrainers(gymID):
-    conn = get_db_connection()
-    personalTrainers = conn.execute('SELECT * FROM personalTrainerTable WHERE gymID = ' + str(gymID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    personalTrainers = session.execute('SELECT * FROM personalTrainerTable WHERE gymID = ' + str(gymID)).fetchall()
+    session.commit()
+    session.close()
 
     return personalTrainers
 
 def getFacilities(gymID):
-    conn = get_db_connection()
-    facilities = conn.execute('SELECT * FROM facilityTable WHERE gymID = ' + str(gymID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    facilities = session.execute('SELECT * FROM facilityTable WHERE gymID = ' + str(gymID)).fetchall()
+    session.commit()
+    session.close()
 
     return facilities
 
 def checkSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    conn = get_db_connection()
-    userValue = conn.execute('SELECT * FROM userScheduleTable WHERE (userID = ' + str(userID) 
+    session = loadSession()
+    userValue = session.execute('SELECT * FROM userScheduleTable WHERE (userID = ' + str(userID) 
     + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-    conn.commit()
+    session.commit()
 
     if userValue:
         print("This interval is taken for user")
     else:
-        facilityValue = conn.execute('SELECT * FROM facilityScheduleTable WHERE (facilityID = ' + str(facilityID)
+        facilityValue = session.execute('SELECT * FROM facilityScheduleTable WHERE (facilityID = ' + str(facilityID)
         + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-        conn.commit()
+        session.commit()
         
         if facilityValue:
             print('facility interval is taken for the user')
         else:
             print(ptSelection)
-            ptValue = conn.execute('SELECT * FROM ptScheduleTable WHERE (ptID = ' + str(ptSelection)
+            ptValue = session.execute('SELECT * FROM ptScheduleTable WHERE (ptID = ' + str(ptSelection)
             + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-            conn.commit()
+            session.commit()
 
             if ptValue:
                 print("Personal trainer interval is taken")
@@ -170,54 +340,54 @@ def checkSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
                 print("you can take this interval ")
                 return True
     
-    conn.close()
+    session.close()
     return False
 
 def addSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    conn = get_db_connection()
-    conn.execute('INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (' 
+    session = loadSession()
+    session.execute('INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (' 
     + str(userID) + ', "' + daySelection
     + '", "' + timeSelection + '" )') 
-    conn.commit()
+    session.commit()
 
     
-    conn.execute('INSERT INTO  facilityScheduleTable VALUES (' + str(facilityID) + ', "' + daySelection
+    session.execute('INSERT INTO  facilityScheduleTable VALUES (' + str(facilityID) + ', "' + daySelection
     + '", "' + timeSelection + '")') 
-    conn.commit()
+    session.commit()
 
     
-    conn.execute('INSERT INTO  ptScheduleTable VALUES (' + str(ptSelection) + ', "' + daySelection
+    session.execute('INSERT INTO  ptScheduleTable VALUES (' + str(ptSelection) + ', "' + daySelection
     + '", "' + timeSelection + '")') 
-    conn.commit()
+    session.commit()
 
-    conn.close()
+    session.close()
 
 def getUserSchedules(userID):
 
-    conn = get_db_connection()
-    schedules = conn.execute('SELECT * FROM userScheduleTable WHERE userID= ' + str(userID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    schedules = session.execute('SELECT * FROM userScheduleTable WHERE userID= ' + str(userID)).fetchall()
+    session.commit()
+    session.close()
 
     return schedules
 
 #def getGymCurrentUser(managerGym):
-    #conn=get_db_connection()
+    #session=loadSession()
     
 
 
 def getGymCurrentTrainer(managerGym):
-    conn = get_db_connection()
-    numberOfTrainers = conn.execute('SELECT * FROM managerTable WHERE gymID = ' + str(managerGym['gymID'])).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    numberOfTrainers = session.execute('SELECT * FROM managerTable WHERE gymID = ' + str(managerGym['gymID'])).fetchall()
+    session.commit()
+    session.close()
 
     return len(numberOfTrainers)
   
 def changeUserProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    conn = get_db_connection()
-    conn.execute('UPDATE userTable SET u_name="' + inputData[1]
+    session = loadSession()
+    session.execute('UPDATE userTable SET u_name="' + inputData[1]
     + '", u_surname="' + inputData[2]
     + '", u_age=' + str(inputData[3])
     + ', u_gender="' + inputData[4] 
@@ -225,22 +395,22 @@ def changeUserProfile(inputData):
     + '", userPassword="' + inputData[6]
     + '" WHERE userID=' + str(inputData[0]) )
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     print(inputData[5])
     addActiveUser(inputData[5])
     
 def changeManagerProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    conn = get_db_connection()
-    conn.execute('UPDATE managerTable SET managerUsername="' + inputData[1]
+    session = loadSession()
+    session.execute('UPDATE managerTable SET managerUsername="' + inputData[1]
     + '", managerPassword="' + inputData[2]
     + '", gymID=' + str(inputData[3])
     + ' WHERE managerID=' + str(inputData[0]) )
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     addActiveManager(inputData[1])
 
