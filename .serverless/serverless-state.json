@@ -173,7 +173,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/serverless-flask/dev/1672436949325-2022-12-30T21:49:09.325Z/serverless-flask.zip"
+                "S3Key": "serverless/serverless-flask/dev/1672470573744-2022-12-31T07:09:33.744Z/serverless-flask.zip"
               },
               "Handler": "wsgi_handler.handler",
               "Runtime": "python3.9",
@@ -191,14 +191,14 @@
               "AppLogGroup"
             ]
           },
-          "AppLambdaVersionQdc0IBst5s9x5CWNpePJw0sivVeqMYAl65JeIaz9k": {
+          "AppLambdaVersionFHpBk3ssRjNiw2rkeRgUFoM43gzio3sHHQDI6TOCT0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "yZRuTlAyy8VMHHwM52JQCRQc3hxYk5n73LJgY5Cv2Lo="
+              "CodeSha256": "WmOF0pW2qiKbP14RObI8FUphTXajFbuKlot2dUmnjPg="
             }
           },
           "ApiGatewayRestApi": {
@@ -323,7 +323,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1672436945040": {
+          "ApiGatewayDeployment1672470565196": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -386,7 +386,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionQdc0IBst5s9x5CWNpePJw0sivVeqMYAl65JeIaz9k"
+              "Ref": "AppLambdaVersionFHpBk3ssRjNiw2rkeRgUFoM43gzio3sHHQDI6TOCT0"
             },
             "Export": {
               "Name": "sls-serverless-flask-dev-AppLambdaFunctionQualifiedArn"
@@ -535,7 +535,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionQdc0IBst5s9x5CWNpePJw0sivVeqMYAl65JeIaz9k"
+        "versionLogicalId": "AppLambdaVersionFHpBk3ssRjNiw2rkeRgUFoM43gzio3sHHQDI6TOCT0"
       }
     },
     "configValidationMode": "warn",
@@ -560,7 +560,7 @@
     "artifact": "C:\\Users\\konurhan\\411\\backend\\.serverless\\serverless-flask.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/serverless-flask/dev/1672436949325-2022-12-30T21:49:09.325Z",
+    "artifactDirectoryName": "serverless/serverless-flask/dev/1672470573744-2022-12-31T07:09:33.744Z",
     "artifact": "serverless-flask.zip"
   }
 }

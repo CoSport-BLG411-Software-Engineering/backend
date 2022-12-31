@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
     session.row_factory = sqlite3.Row
     return session"""
 
-engine = create_engine(r'sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
+engine = create_engine(r'sqlite:///database.db', echo=True)
 Base = declarative_base(engine)
 
 class User(Base):
@@ -414,7 +414,7 @@ def changeManagerProfile(inputData):
 
     addActiveManager(inputData[1])
 
-class User():
+"""class User():
 
     def __init__(self, userID, u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword, active = True):
         self.userID = userID
@@ -442,5 +442,5 @@ class User():
 
     def getUserName(self):
         return self.userName
-   
+   """
     
