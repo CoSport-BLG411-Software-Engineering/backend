@@ -1,14 +1,14 @@
 import sqlite3
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 """def loadSession():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn"""
+    session = sqlite3.sessionect('database.db')
+    session.row_factory = sqlite3.Row
+    return session"""
 
-engine = create_engine('sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
+engine = create_engine(r'sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
 Base = declarative_base(engine)
 
 class User(Base):
@@ -215,31 +215,31 @@ def addManager(managerUsername, managerPassword, gymID):
     session.close()
 
 def getUserGyms(chain_ID):
-    conn = loadSession()
-    gyms = conn.execute(" SELECT gymTable.gymID, gymTable.gymName"
+    session = loadSession()
+    gyms = session.execute(" SELECT gymTable.gymID, gymTable.gymName"
             " FROM gymTable" 
             " INNER JOIN chainTable"
             " ON gymTable.chain_ID = chainTable.chain_ID"
             " WHERE chainTable.chain_ID = " + str(chain_ID)).fetchall()
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     return gyms
 
 def addActiveUser(user):
-    conn = loadSession()
+    session = loadSession()
 
-    values = conn.execute('SELECT * FROM userTable WHERE userName= "' + user + '"').fetchone()
-    conn.commit()
+    values = session.execute('SELECT * FROM userTable WHERE userName= "' + user + '"').fetchone()
+    session.commit()
 
     for value in values:
         print(value)
 
-    conn.execute('DELETE FROM activeUserTable').fetchall()
-    conn.commit()
+    session.execute('DELETE FROM activeUserTable').fetchall()
+    session.commit()
 
-    conn.execute('INSERT INTO activeUserTable VALUES ('
+    session.execute('INSERT INTO activeUserTable VALUES ('
         + str(values[0]) + ', '
         + '"' + values[1] + '" , '
         + '"' + values[2] + '" , '
@@ -249,90 +249,90 @@ def addActiveUser(user):
         + '"' + values[6] + '" , '
         + '"' + values[7]  + '")' )
         
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def addActiveManager(manager):
-    conn = loadSession()
+    session = loadSession()
 
-    values = conn.execute('SELECT * FROM managerTable WHERE managerUsername= "' + manager + '"').fetchone()
-    conn.commit()
+    values = session.execute('SELECT * FROM managerTable WHERE managerUsername= "' + manager + '"').fetchone()
+    session.commit()
 
     for value in values:
         print(value)
 
-    conn.execute('DELETE FROM activeManagerTable').fetchall()
-    conn.commit()
+    session.execute('DELETE FROM activeManagerTable').fetchall()
+    session.commit()
 
-    conn.execute('INSERT INTO activeManagerTable VALUES ('
+    session.execute('INSERT INTO activeManagerTable VALUES ('
         + str(values[0]) + ', '
         + '"' + values[1] + '" , '
         + '"' + values[2] + '" , '
         + str(values[3]) + ')')
         
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
 def getActiveUser():
-    conn = loadSession()
-    activeUser = conn.execute('SELECT * FROM activeUserTable').fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    activeUser = session.execute('SELECT * FROM activeUserTable').fetchall()
+    session.commit()
+    session.close()
 
     return activeUser
 
 def getActiveManager():
-    conn = loadSession()
-    activeManager = conn.execute('SELECT * FROM activeManagerTable').fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    activeManager = session.execute('SELECT * FROM activeManagerTable').fetchall()
+    session.commit()
+    session.close()
 
     return activeManager
 
 def getGym(gymID):
-    conn = loadSession()
-    selectedGym = conn.execute('SELECT * FROM gymTable WHERE gymID =' + str(gymID)).fetchone()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    selectedGym = session.execute('SELECT * FROM gymTable WHERE gymID =' + str(gymID)).fetchone()
+    session.commit()
+    session.close()
 
     return selectedGym
 
 def getPersonalTrainers(gymID):
-    conn = loadSession()
-    personalTrainers = conn.execute('SELECT * FROM personalTrainerTable WHERE gymID = ' + str(gymID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    personalTrainers = session.execute('SELECT * FROM personalTrainerTable WHERE gymID = ' + str(gymID)).fetchall()
+    session.commit()
+    session.close()
 
     return personalTrainers
 
 def getFacilities(gymID):
-    conn = loadSession()
-    facilities = conn.execute('SELECT * FROM facilityTable WHERE gymID = ' + str(gymID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    facilities = session.execute('SELECT * FROM facilityTable WHERE gymID = ' + str(gymID)).fetchall()
+    session.commit()
+    session.close()
 
     return facilities
 
 def checkSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    conn = loadSession()
-    userValue = conn.execute('SELECT * FROM userScheduleTable WHERE (userID = ' + str(userID) 
+    session = loadSession()
+    userValue = session.execute('SELECT * FROM userScheduleTable WHERE (userID = ' + str(userID) 
     + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-    conn.commit()
+    session.commit()
 
     if userValue:
         print("This interval is taken for user")
     else:
-        facilityValue = conn.execute('SELECT * FROM facilityScheduleTable WHERE (facilityID = ' + str(facilityID)
+        facilityValue = session.execute('SELECT * FROM facilityScheduleTable WHERE (facilityID = ' + str(facilityID)
         + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-        conn.commit()
+        session.commit()
         
         if facilityValue:
             print('facility interval is taken for the user')
         else:
             print(ptSelection)
-            ptValue = conn.execute('SELECT * FROM ptScheduleTable WHERE (ptID = ' + str(ptSelection)
+            ptValue = session.execute('SELECT * FROM ptScheduleTable WHERE (ptID = ' + str(ptSelection)
             + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-            conn.commit()
+            session.commit()
 
             if ptValue:
                 print("Personal trainer interval is taken")
@@ -340,54 +340,54 @@ def checkSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
                 print("you can take this interval ")
                 return True
     
-    conn.close()
+    session.close()
     return False
 
 def addSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    conn = loadSession()
-    conn.execute('INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (' 
+    session = loadSession()
+    session.execute('INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (' 
     + str(userID) + ', "' + daySelection
     + '", "' + timeSelection + '" )') 
-    conn.commit()
+    session.commit()
 
     
-    conn.execute('INSERT INTO  facilityScheduleTable VALUES (' + str(facilityID) + ', "' + daySelection
+    session.execute('INSERT INTO  facilityScheduleTable VALUES (' + str(facilityID) + ', "' + daySelection
     + '", "' + timeSelection + '")') 
-    conn.commit()
+    session.commit()
 
     
-    conn.execute('INSERT INTO  ptScheduleTable VALUES (' + str(ptSelection) + ', "' + daySelection
+    session.execute('INSERT INTO  ptScheduleTable VALUES (' + str(ptSelection) + ', "' + daySelection
     + '", "' + timeSelection + '")') 
-    conn.commit()
+    session.commit()
 
-    conn.close()
+    session.close()
 
 def getUserSchedules(userID):
 
-    conn = loadSession()
-    schedules = conn.execute('SELECT * FROM userScheduleTable WHERE userID= ' + str(userID)).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    schedules = session.execute('SELECT * FROM userScheduleTable WHERE userID= ' + str(userID)).fetchall()
+    session.commit()
+    session.close()
 
     return schedules
 
 #def getGymCurrentUser(managerGym):
-    #conn=loadSession()
+    #session=loadSession()
     
 
 
 def getGymCurrentTrainer(managerGym):
-    conn = loadSession()
-    numberOfTrainers = conn.execute('SELECT * FROM managerTable WHERE gymID = ' + str(managerGym['gymID'])).fetchall()
-    conn.commit()
-    conn.close()
+    session = loadSession()
+    numberOfTrainers = session.execute('SELECT * FROM managerTable WHERE gymID = ' + str(managerGym['gymID'])).fetchall()
+    session.commit()
+    session.close()
 
     return len(numberOfTrainers)
   
 def changeUserProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    conn = loadSession()
-    conn.execute('UPDATE userTable SET u_name="' + inputData[1]
+    session = loadSession()
+    session.execute('UPDATE userTable SET u_name="' + inputData[1]
     + '", u_surname="' + inputData[2]
     + '", u_age=' + str(inputData[3])
     + ', u_gender="' + inputData[4] 
@@ -395,22 +395,22 @@ def changeUserProfile(inputData):
     + '", userPassword="' + inputData[6]
     + '" WHERE userID=' + str(inputData[0]) )
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     print(inputData[5])
     addActiveUser(inputData[5])
     
 def changeManagerProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    conn = loadSession()
-    conn.execute('UPDATE managerTable SET managerUsername="' + inputData[1]
+    session = loadSession()
+    session.execute('UPDATE managerTable SET managerUsername="' + inputData[1]
     + '", managerPassword="' + inputData[2]
     + '", gymID=' + str(inputData[3])
     + ' WHERE managerID=' + str(inputData[0]) )
 
-    conn.commit()
-    conn.close()
+    session.commit()
+    session.close()
 
     addActiveManager(inputData[1])
 

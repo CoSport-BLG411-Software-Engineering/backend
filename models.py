@@ -1,5 +1,5 @@
 import sqlite3
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
     session.row_factory = sqlite3.Row
     return session"""
 
-engine = create_engine('sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
+engine = create_engine(r'sqlite:///database.db', echo=True)
 Base = declarative_base(engine)
 
 class User(Base):
@@ -117,7 +117,7 @@ class Manager(Base):
 
 class PT(Base):
     """"""
-    __tablename__ = 'managerTable'
+    __tablename__ = 'personalTrainerTable'
     
     pt_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
@@ -146,7 +146,7 @@ class PT(Base):
 
 class Facility(Base):
     """"""
-    __tablename__ = 'managerTable'
+    __tablename__ = 'facilityTable'
     
     f_id = Column(Integer, primary_key=True, autoincrement=True)
     facilityType = Column(String)
@@ -414,7 +414,7 @@ def changeManagerProfile(inputData):
 
     addActiveManager(inputData[1])
 
-class User():
+"""class User():
 
     def __init__(self, userID, u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword, active = True):
         self.userID = userID
@@ -442,5 +442,5 @@ class User():
 
     def getUserName(self):
         return self.userName
-   
+   """
     
