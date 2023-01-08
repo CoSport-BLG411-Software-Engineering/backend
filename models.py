@@ -1,14 +1,10 @@
 import sqlite3
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-"""def loadSession():
-    session = sqlite3.sessionect('database.db')
-    session.row_factory = sqlite3.Row
-    return session"""
 
-engine = create_engine('sqlite:///C:\Users\konurhan\Documents\GitHub\backend\database.db', echo=True)
+engine = create_engine('mysql+pymysql://sql7587680:SlJGpZGk54@sql7.freesqldatabase.com:3306/sql7587680', echo=True)
 Base = declarative_base(engine)
 
 class User(Base):
@@ -117,7 +113,7 @@ class Manager(Base):
 
 class PT(Base):
     """"""
-    __tablename__ = 'managerTable'
+    __tablename__ = 'personalTrainerTable'
     
     pt_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
@@ -146,7 +142,7 @@ class PT(Base):
 
 class Facility(Base):
     """"""
-    __tablename__ = 'managerTable'
+    __tablename__ = 'facilityTable'
     
     f_id = Column(Integer, primary_key=True, autoincrement=True)
     facilityType = Column(String)
@@ -172,249 +168,120 @@ def loadSession():
     session = Session()
     return session
 
-    
+def mysqlconnect():
+    """"""
+    metadata = Base.metadata
+    conn = engine.connect()
+    return conn
     
 
 def retrieveUsers():
-    session = loadSession()
-    users = session.execute("SELECT * FROM userTable").fetchall()
-    session.close()
-
+    users = engine.execute("SELECT * FROM userTable").fetchall()
     return users 
 
 def addUser(u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword):
-    session = loadSession()
-    session.execute('INSERT INTO userTable '
-    ' (u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword) VALUES ('
-        + '"' + u_name + '" , '
-        + '"' + u_surname + '" , '
-        + '' + str(u_age) + ', '
-        + '"' + u_gender + '" , '
-        + str(chain_ID) + ', '
-        + '"' + userName + '" , '
-        + '"' + userPassword + '") ')
-    session.commit()
-    session.close()
+    engine.execute("INSERT INTO userTable (u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword) VALUES (%s, %s, %s, %s, %s, %s, %s)", (u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword))
 
 def retrieveManagers():
-    session = loadSession()
-    users = session.execute("SELECT * FROM managerTable").fetchall()
-    session.close()
-
+    users = engine.execute("SELECT * FROM managerTable").fetchall()
     return users 
 
 def addManager(managerUsername, managerPassword, gymID):
-    session = loadSession()
-    print("adding manager ")
-    session.execute('INSERT INTO managerTable '
-    ' (managerUsername, managerPassword, gymID) VALUES ('
-        + '"' + managerUsername + '" , '
-        + '"' + managerPassword + '" ,' 
-        + str(gymID) + ')')
-    session.commit()
-    session.close()
+    engine.execute("INSERT INTO managerTable (managerUsername, managerPassword, gymID) VALUES (%s, %s, %s)", (managerUsername, managerPassword, gymID))
 
 def getUserGyms(chain_ID):
-    session = loadSession()
-    gyms = session.execute(" SELECT gymTable.gymID, gymTable.gymName"
-            " FROM gymTable" 
-            " INNER JOIN chainTable"
-            " ON gymTable.chain_ID = chainTable.chain_ID"
-            " WHERE chainTable.chain_ID = " + str(chain_ID)).fetchall()
-
-    session.commit()
-    session.close()
-
+    gyms = engine.execute("SELECT gymTable.gymID, gymTable.gymName FROM gymTable INNER JOIN chainTable ON gymTable.chain_ID = chainTable.chain_ID WHERE chainTable.chain_ID =%s", str(chain_ID)).fetchall()
     return gyms
 
 def addActiveUser(user):
-    session = loadSession()
 
-    values = session.execute('SELECT * FROM userTable WHERE userName= "' + user + '"').fetchone()
-    session.commit()
+    values = engine.execute("SELECT * FROM userTable WHERE userName=%s", user).fetchone()
 
     for value in values:
         print(value)
 
-    session.execute('DELETE FROM activeUserTable').fetchall()
-    session.commit()
-
-    session.execute('INSERT INTO activeUserTable VALUES ('
-        + str(values[0]) + ', '
-        + '"' + values[1] + '" , '
-        + '"' + values[2] + '" , '
-        + str(values[3]) + ', '
-        + '"' + values[4] + '" , '
-        + str(values[5]) + ', '
-        + '"' + values[6] + '" , '
-        + '"' + values[7]  + '")' )
-        
-    session.commit()
-    session.close()
-
+    engine.execute("DELETE FROM activeUserTable")
+    engine.execute("INSERT INTO activeUserTable VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (str(values[0]), values[1], values[2], str(values[3]), values[4], str(values[5]), values[6], values[7]))
+    
 def addActiveManager(manager):
-    session = loadSession()
 
-    values = session.execute('SELECT * FROM managerTable WHERE managerUsername= "' + manager + '"').fetchone()
-    session.commit()
-
+    values = engine.execute("SELECT * FROM managerTable WHERE managerUsername= %s", manager).fetchone()
     for value in values:
         print(value)
 
-    session.execute('DELETE FROM activeManagerTable').fetchall()
-    session.commit()
-
-    session.execute('INSERT INTO activeManagerTable VALUES ('
-        + str(values[0]) + ', '
-        + '"' + values[1] + '" , '
-        + '"' + values[2] + '" , '
-        + str(values[3]) + ')')
-        
-    session.commit()
-    session.close()
+    engine.execute("DELETE FROM activeManagerTable")
+    engine.execute("INSERT INTO activeManagerTable VALUES (%s, %s, %s, %s)", (str(values[0]), values[1], values[2], str(values[3])))
 
 def getActiveUser():
-    session = loadSession()
-    activeUser = session.execute('SELECT * FROM activeUserTable').fetchall()
-    session.commit()
-    session.close()
-
+    activeUser = engine.execute("SELECT * FROM activeUserTable").fetchall()
     return activeUser
 
 def getActiveManager():
-    session = loadSession()
-    activeManager = session.execute('SELECT * FROM activeManagerTable').fetchall()
-    session.commit()
-    session.close()
-
+    activeManager = engine.execute("SELECT * FROM activeManagerTable").fetchall()
     return activeManager
 
 def getGym(gymID):
-    session = loadSession()
-    selectedGym = session.execute('SELECT * FROM gymTable WHERE gymID =' + str(gymID)).fetchone()
-    session.commit()
-    session.close()
-
+    selectedGym = engine.execute("SELECT * FROM gymTable WHERE gymID =%s", str(gymID)).fetchone()
     return selectedGym
 
 def getPersonalTrainers(gymID):
-    session = loadSession()
-    personalTrainers = session.execute('SELECT * FROM personalTrainerTable WHERE gymID = ' + str(gymID)).fetchall()
-    session.commit()
-    session.close()
-
+    personalTrainers = engine.execute("SELECT * FROM personalTrainerTable WHERE gymID =%s", str(gymID)).fetchall()
     return personalTrainers
 
 def getFacilities(gymID):
-    session = loadSession()
-    facilities = session.execute('SELECT * FROM facilityTable WHERE gymID = ' + str(gymID)).fetchall()
-    session.commit()
-    session.close()
-
+    facilities = engine.execute("SELECT * FROM facilityTable WHERE gymID =%s", str(gymID)).fetchall()
     return facilities
 
 def checkSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    session = loadSession()
-    userValue = session.execute('SELECT * FROM userScheduleTable WHERE (userID = ' + str(userID) 
-    + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-    session.commit()
+    userValue = engine.execute("SELECT * FROM userScheduleTable WHERE (userID =%s AND scheduleDay=%s AND scheduleTime=%s)",(str(userID), daySelection, timeSelection)).fetchall()
 
     if userValue:
         print("This interval is taken for user")
     else:
-        facilityValue = session.execute('SELECT * FROM facilityScheduleTable WHERE (facilityID = ' + str(facilityID)
-        + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-        session.commit()
-        
+        facilityValue = engine.execute("SELECT * FROM facilityScheduleTable WHERE (facilityID =%s AND scheduleDay=%s AND scheduleTime=%s)",(str(facilityID), daySelection, timeSelection)).fetchall()
         if facilityValue:
             print('facility interval is taken for the user')
         else:
             print(ptSelection)
-            ptValue = session.execute('SELECT * FROM ptScheduleTable WHERE (ptID = ' + str(ptSelection)
-            + ' AND scheduleDay= "' + daySelection + '" AND scheduleTime= "' + timeSelection + '")' ).fetchall()
-            session.commit()
-
+            ptValue = engine.execute("SELECT * FROM ptScheduleTable WHERE (ptID =%s AND scheduleDay=%s AND scheduleTime=%s)",(str(ptSelection), daySelection, timeSelection)).fetchall()
             if ptValue:
                 print("Personal trainer interval is taken")
             else:
                 print("you can take this interval ")
                 return True
-    
-    session.close()
     return False
 
 def addSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
-    session = loadSession()
-    session.execute('INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (' 
-    + str(userID) + ', "' + daySelection
-    + '", "' + timeSelection + '" )') 
-    session.commit()
+    engine.execute("INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (%s, %s, %s)", (str(userID), daySelection, timeSelection)) 
 
     
-    session.execute('INSERT INTO  facilityScheduleTable VALUES (' + str(facilityID) + ', "' + daySelection
-    + '", "' + timeSelection + '")') 
-    session.commit()
+    engine.execute("INSERT INTO  facilityScheduleTable VALUES (%s, %s, %s)", (str(facilityID), daySelection, timeSelection)) 
 
-    
-    session.execute('INSERT INTO  ptScheduleTable VALUES (' + str(ptSelection) + ', "' + daySelection
-    + '", "' + timeSelection + '")') 
-    session.commit()
+    engine.execute("INSERT INTO  ptScheduleTable VALUES (%s, %s, %s)", (str(ptSelection), daySelection, timeSelection))
 
-    session.close()
 
 def getUserSchedules(userID):
-
-    session = loadSession()
-    schedules = session.execute('SELECT * FROM userScheduleTable WHERE userID= ' + str(userID)).fetchall()
-    session.commit()
-    session.close()
-
+    schedules = engine.execute("SELECT * FROM userScheduleTable WHERE userID=%s", str(userID)).fetchall()
     return schedules
-
-#def getGymCurrentUser(managerGym):
-    #session=loadSession()
-    
 
 
 def getGymCurrentTrainer(managerGym):
-    session = loadSession()
-    numberOfTrainers = session.execute('SELECT * FROM managerTable WHERE gymID = ' + str(managerGym['gymID'])).fetchall()
-    session.commit()
-    session.close()
-
+    numberOfTrainers = engine.execute("SELECT * FROM managerTable WHERE gymID =%s", str(managerGym['gymID'])).fetchall()
     return len(numberOfTrainers)
   
+
 def changeUserProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    session = loadSession()
-    session.execute('UPDATE userTable SET u_name="' + inputData[1]
-    + '", u_surname="' + inputData[2]
-    + '", u_age=' + str(inputData[3])
-    + ', u_gender="' + inputData[4] 
-    + '", userName="' + inputData[5] 
-    + '", userPassword="' + inputData[6]
-    + '" WHERE userID=' + str(inputData[0]) )
-
-    session.commit()
-    session.close()
-
+    engine.execute("UPDATE userTable SET u_name=%s, u_surname=%s, u_age=%s, u_gender=%s, userName=%s, userPassword=%s WHERE userID=%s", (inputData[1],inputData[2],str(inputData[3]),inputData[4],inputData[5],inputData[6],str(inputData[0])))
     print(inputData[5])
     addActiveUser(inputData[5])
     
 def changeManagerProfile(inputData):
     # input data name, surname, age, gender, userName, userPassword
-    session = loadSession()
-    session.execute('UPDATE managerTable SET managerUsername="' + inputData[1]
-    + '", managerPassword="' + inputData[2]
-    + '", gymID=' + str(inputData[3])
-    + ' WHERE managerID=' + str(inputData[0]) )
-
-    session.commit()
-    session.close()
-
+    engine.execute("UPDATE managerTable SET managerUsername=%s, managerPassword=%s, gymID=%s WHERE managerID=%s", (inputData[1],inputData[2],str(inputData[3]), str(inputData[0])))
     addActiveManager(inputData[1])
 
-class User():
+"""class User():
 
     def __init__(self, userID, u_name, u_surname, u_age, u_gender, chain_ID, userName, userPassword, active = True):
         self.userID = userID
@@ -442,5 +309,5 @@ class User():
 
     def getUserName(self):
         return self.userName
-   
+   """
     
