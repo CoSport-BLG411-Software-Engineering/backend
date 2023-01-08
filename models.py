@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
     session.row_factory = sqlite3.Row
     return session"""
 
-engine = create_engine(r'sqlite:///database.db', echo=True)
+engine = create_engine('mysql+pymysql://sql7587680:SlJGpZGk54@sql7.freesqldatabase.com/sql7587680', echo=True)
 Base = declarative_base(engine)
 
 class User(Base):
@@ -371,9 +371,6 @@ def getUserSchedules(userID):
 
     return schedules
 
-#def getGymCurrentUser(managerGym):
-    #session=loadSession()
-    
 
 
 def getGymCurrentTrainer(managerGym):
