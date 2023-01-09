@@ -3,19 +3,21 @@
     <title>Flask Intro - login page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-  <body>
-    <div class="container">
+  <body style="background-color: #f0f0f0;">
+    <div class="container" style="text-align: center;">
       <h1>Please login</h1>
       <br>
       <form action="" method="POST">
         <input type="text" placeholder="managerUsername" name="managerUsername" value="{{
-          request.form.managerUsername }}">
+          request.form.managerUsername }}"   style="background-color: #D1F6F9;">
+          <br><br><br>
          <input type="password" placeholder="managerPassword" name="managerPassword" value="{{
-          request.form.managerPassword }}">
-        <input class="btn btn-default" type="submit" value="Login">
+          request.form.managerPassword }}"  style="background-color: #D1F6F9;">
+          <br><br>
+        <input class="btn btn-default" type="submit" value="Login"  style="background-color: #D1F6F9;">
       </form>
       <form action="" method="POST"> 
-        <input class="btn btn-default" type="submit" value="Signup">
+        <input class="btn btn-default" type="submit" value="Signup"  style="background-color: #D1F6F9;">
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}

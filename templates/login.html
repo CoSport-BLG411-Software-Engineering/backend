@@ -4,18 +4,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div class="container">
-      <h1>Please login</h1>
+    <div class="container" style="text-align: center;">
+      <h1 style="color: #333;">Manager Login</h1>
       <br>
       <form action="" method="POST">
         <input type="text" placeholder="userName" name="userName" value="{{
-          request.form.userName }}">
+          request.form.userName }}"  style="background-color: #D1F6F9;">
+          <br><br><br>
          <input type="password" placeholder="userPassword" name="userPassword" value="{{
-          request.form.userPassword }}">
-        <input class="btn btn-default" type="submit" value="Login">
+          request.form.userPassword }}"  style="background-color: #D1F6F9;">
+          <br><br>
+        <input class="btn btn-default" type="submit" value="Login"  style="background-color: #D1F6F9;">
       </form>
       <form action="" method="POST"> 
-        <input class="btn btn-default" type="submit" value="Signup">
+        <input class="btn btn-default" type="submit" value="Signup" style="background-color: #D1F6F9;">
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
