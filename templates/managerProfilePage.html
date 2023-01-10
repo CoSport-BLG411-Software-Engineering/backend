@@ -3,7 +3,7 @@
     <title>MANAGER PROFILE PAGE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-  <body>
+  <body style="text-align: center;">
     <form action="{{url_for('managerProfile')}}" method="post">
       {% for i in range( activeManager.keys() | length ) %}
         <br>
@@ -17,7 +17,7 @@
                     >{{ activeManager[i] }}</textarea>
           <br>
         {% else %}
-          <h3>{{ activeManager.keys()[i]}}</h3>
+          <h3 style="background-color: #D1F6F9;">{{ activeManager.keys()[i]}}</h3>
           <textarea name="activeManagerFeatures"
           placeholder= {{activeManager.keys()[i]}}
           rows="1"
@@ -26,7 +26,7 @@
         {%endif%}
       {% endfor %}
       <br>
-      <button type="submit" class="button-5">Save</button>
+      <button type="submit" class="button-5" style="background-color: #D1F6F9;">Save</button>
     </form>
   </body>
 </html>
