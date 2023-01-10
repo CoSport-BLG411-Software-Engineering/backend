@@ -14,13 +14,13 @@ def homePage():
     session = dbHandler.loadSession()
     session.close()
 
-    return render_template("base.html")
+    return redirect(url_for('userLogin'))
 
 
 @app.route('/')
 def render_page_web():
     print("select customer or manager ")
-    return render_template('index.html')
+    return redirect(url_for('userLogin'))
 
 
 @app.route('/web/userLogin', methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def userSelectGymPage():
             
             return redirect(url_for('activeSchedules'))
         else:
-            redirect(url_for('userSelectGymPage'))
+            return redirect(url_for('userMainScreen'))
         
 
     facilities = dbHandler.getFacilities(selectedGym['gymID'])
