@@ -4,17 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
-    <div class="container">
+    <div class="container" style="text-align: center;">
       <h1>Please login</h1>
       <br>
       <form action="" method="POST">
         <input type="text" placeholder="managerUsername" name="managerUsername" value="{{
-          request.form.managerUsername }}">
+          request.form.managerUsername }}" style="background-color: #D1F6F9;">
          <input type="password" placeholder="managerPassword" name="managerPassword" value="{{
-          request.form.managerPassword }}">
+          request.form.managerPassword }}" style="background-color: #D1F6F9;">
           <input type="number" placeholder="gym_ID" name="gym_ID" value="{{
-            request.form.gym_ID }}">
-        <input class="btn btn-default" type="submit" value="Signup">
+            request.form.gym_ID }}" style="background-color: #D1F6F9;">
+        <input class="btn btn-default" type="submit" value="Signup" style="background-color: #D1F6F9;">
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
