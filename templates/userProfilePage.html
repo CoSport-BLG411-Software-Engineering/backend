@@ -3,13 +3,13 @@
     <title>USER PROFILE PAGE</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
-  <body>
+  <body style="text-align: center;">
     <form action="{{url_for('userProfile')}}" method="post">
       {% for i in range( activeUser.keys() | length ) %}
         <br>
         {% if activeUser.keys()[i] != "u_age" and activeUser.keys()[i] != "userID"
         and activeUser.keys()[i] != "chain_ID"  %}
-          <h3>{{ activeUser.keys()[i]}}</h3>
+          <h3 style="background-color: #D1F6F9;" >{{ activeUser.keys()[i]}}</h3>
           <textarea name="activeUserFeatures"
                     placeholder= {{activeUser.keys()[i]}}
                     rows="1"
