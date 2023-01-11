@@ -4,18 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body style="text-align: center;">
-    <form action="{{url_for('userMainScreen')}}" method="GET">
-      <div class="container" style="background-color: #D1F6F9;">
-        <h1>Your scheduled.</h1>
-        <h1>Gym days</h1>
-        <br><br>
-        {% for schedule in schedules %}
-            <p>{{ schedule['scheduleDay'], schedule['scheduleTime'] }}</option>
-        {% endfor %}
-        <div>
-            <button type="Submit" style="background-color: #D1F6F9;">Select</button>
-        </div>
-      </div>
-    </form>
+    <form action="{{url_for('userSchedules')}}" method="POST">
+      <div class="container">
+          <h1>Your schedule</h1>
+          <h1>SCHEDULES</h1>
+          <br><br>
+          {% for i in range(schedules|length) %}
+            <input type="checkbox" id="schedule" name="scheduleDeletion" value= "{{ i }}" style="background-color: #D1F6F9;">      
+            <label>{{ schedules[i]['scheduleDay'], schedules[i]['scheduleTime'] }}</label><br></br>
+          {% endfor %}
+        
+        <button type="Submit" style="background-color: #D1F6F9;"> Delete </button>
+      </form>
+    </div>
   </body>
 </html>

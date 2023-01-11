@@ -5,15 +5,18 @@
   </head>
   <body style="text-align: center;">
     <div class="container" style="text-align: center;">
-      <h1>Please login</h1>
+      <h1>Manager Signup</h1>
       <br>
       <form action="" method="POST">
         <input type="text" placeholder="managerUsername" name="managerUsername" value="{{
           request.form.managerUsername }}" style="background-color: #D1F6F9;">
+          <br><br>
          <input type="password" placeholder="managerPassword" name="managerPassword" value="{{
           request.form.managerPassword }}" style="background-color: #D1F6F9;">
+          <br><br>
           <input type="number" placeholder="gym_ID" name="gym_ID" value="{{
             request.form.gym_ID }}" style="background-color: #D1F6F9;">
+            <br><br>
         <input class="btn btn-default" type="submit" value="Signup" style="background-color: #D1F6F9;">
       </form>
       {% if error %}

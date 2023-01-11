@@ -17,6 +17,9 @@
             request.form.chain_ID }}" style="background-color: #D1F6F9;"><br/><br/><br/>
         <input class="btn btn-default" type="submit" value="Signup" style="background-color: #D1F6F9;">
       </form>
+      <form action="{{url_for('userLogin')}}" method="GET">
+        <input class="btn btn-default" type="submit" value="Login" style="background-color: #D1F6F9;">
+      </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}

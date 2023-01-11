@@ -5,32 +5,33 @@
   </head>
   <body style="text-align: center;">
     <form action="{{url_for('userProfile')}}" method="post">
+      <h1>USER PROFILE</h1>
       {% for i in range( activeUser.keys() | length ) %}
         <br>
-        {% if activeUser.keys()[i] != "u_age" and activeUser.keys()[i] != "userID"
-        and activeUser.keys()[i] != "chain_ID"  %}
-          <h3 style="background-color: #D1F6F9;" >{{ activeUser.keys()[i]}}</h3>
+        {% if activeUser.items()[i][0] != "u_age" and activeUser.items()[i][0] != "userID"
+        and activeUser.items()[i][0] != "chain_ID"  %}
+          <h3>{{activeUser.items()[i][0]}}</h3>
           <textarea name="activeUserFeatures"
-                    placeholder= {{activeUser.keys()[i]}}
+                    placeholder= "{{activeUser.keys()[i]}}"
                     rows="1"
                     cols="15"
                     >{{ activeUser[i] }}</textarea>
-          <br>
+          
         {% elif activeUser.keys()[i] == "u_age" %}
-          <h3>{{ activeUser.keys()[i]}}</h3>
+          <h3>values</h3>
           <input type="number" placeholder="{{ activeUser[i] }} " name="activeUserFeatures" value="{{
             activeUser.keys()[i] }}">
-        {% elif activeUser.keys()[i] == "userID" %}
-          <h3>{{ activeUser.keys()[i]}}</h3>
+        {% elif activeUser.items()[i][0] == "userID" %}
+          <h3>{{ activeUser.items()[i][0]}}</h3>
           <textarea name="activeUserFeatures"
-          placeholder= {{activeUser.keys()[i]}}
+          placeholder= "{{activeUser.keys()[i]}}"
           rows="1"
           cols="15"
           readonly>{{ activeUser[i] }}</textarea>
         {%endif%}
       {% endfor %}
-      <br>
-      <button type="submit" class="button-5">Save</button>
+      <br><br>
+      <button type="submit" class="button-5" style="background-color: #D1F6F9;">Save</button>
     </form>
   </body>
 </html>
