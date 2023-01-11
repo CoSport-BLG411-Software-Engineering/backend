@@ -173,7 +173,7 @@ def userSelectGymPage():
             dbHandler.addSchedule(inputData[0], inputData[1], inputData[2], inputData[3]
             , activeUser['userID'])
             
-            return redirect(url_for('activeSchedules'))
+            return redirect(url_for('userSchedules'))
         else:
             return redirect(url_for('userMainScreen'))
         
@@ -219,7 +219,7 @@ def managerProfile():
 
 
 @app.route('/web/userSchedules')
-def activeSchedules():
+def userSchedules():
     
     activeUsers = dbHandler.getActiveUser()
 

@@ -3,6 +3,12 @@
     <title>Flask Intro - login page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
+  <style>
+    .container {
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
   <body style="text-align: center;">
     <div class="container" style="text-align: center;">
       <h1 style="color: #333;">User Login</h1>
@@ -17,7 +23,7 @@
         <input class="btn btn-default" type="submit" value="Login"  style="background-color: #D1F6F9;">
       </form>
       <form action="" method="POST"> 
-        <input class="btn btn-default" type="submit" value="Signup" style="background-color: #D1F6F9;">
+        <button  style="background-color: #D1F6F9;"><a href="https://s0a658wbqa.execute-api.us-west-2.amazonaws.com/dev/web/userSignup">Signup</a></button>
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
