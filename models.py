@@ -255,18 +255,30 @@ def addSchedule(daySelection, timeSelection, ptSelection, facilityID, userID):
     engine.execute("INSERT INTO userScheduleTable (userID, scheduleDay, scheduleTime) VALUES (%s, %s, %s)", (str(userID), daySelection, timeSelection)) 
 
     
-    engine.execute("INSERT INTO  facilityScheduleTable VALUES (%s, %s, %s)", (str(facilityID), daySelection, timeSelection)) 
+#    engine.execute("INSERT INTO  facilityScheduleTable VALUES (%s, %s, %s)", (str(facilityID), daySelection, timeSelection)) 
 
-    engine.execute("INSERT INTO  ptScheduleTable VALUES (%s, %s, %s)", (str(ptSelection), daySelection, timeSelection))
+#    engine.execute("INSERT INTO  ptScheduleTable VALUES (%s, %s, %s)", (str(ptSelection), daySelection, timeSelection))
 
+def deleteSchedule(userID, scheduleIndex):
+    schedules = engine.execute("SELECT * FROM userScheduleTable WHERE userID=%s", str(userID)).fetchall()
+    engine.execute("DELETE FROM userScheduleTable WHERE (userID = %s  AND scheduleDay=%s AND scheduleTime=%s)",str(userID), str(schedules[scheduleIndex][2]), str(schedules[scheduleIndex][3]))
+    
+#    engine.execute("DELETE FROM  facilityScheduleTable VALUES (%s, %s, %s)", (str(facilityID),  str(schedules[scheduleIndex][2]), str(schedules[scheduleIndex][3])) )
+
+#    engine.execute("DELETE FROM ptScheduleTable VALUES (%s, %s, %s)", (str(ptSelection),  str(schedules[scheduleIndex][2]), str(schedules[scheduleIndex][3])))
 
 def getUserSchedules(userID):
     schedules = engine.execute("SELECT * FROM userScheduleTable WHERE userID=%s", str(userID)).fetchall()
     return schedules
 
 
+def getGymCurrentUser(managerGym):
+    numberOfTrainers = engine.execute("SELECT * FROM userScheduleTable WHERE gymID =%s", str(managerGym['gymID'])).fetchall()
+    return len(numberOfTrainers)
+  
+
 def getGymCurrentTrainer(managerGym):
-    numberOfTrainers = engine.execute("SELECT * FROM managerTable WHERE gymID =%s", str(managerGym['gymID'])).fetchall()
+    numberOfTrainers = engine.execute("SELECT * FROM personalTrainerTable WHERE gymID =%s", str(managerGym['gymID'])).fetchall()
     return len(numberOfTrainers)
   
 

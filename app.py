@@ -144,7 +144,6 @@ def managerMainScreen():
     for manager in activeManagers:
         activeManager = manager
     
-    print("durduuuuuu")
     managerGym = dbHandler.getGym(activeManager['gymID'])
     
     #currentUser = dbHandler.getGymCurrentUser(managerGym)
@@ -162,7 +161,6 @@ def userSelectGymPage():
     for user in activeUsers:
         activeUser = user
     
-
     if request.method=='POST':
         inputData = list(request.form.values())
 
@@ -218,7 +216,7 @@ def managerProfile():
     return render_template('managerProfilePage.html', activeManager=activeManager)        
 
 
-@app.route('/web/userSchedules')
+@app.route('/web/userSchedules', methods=['GET', 'POST'])
 def userSchedules():
     
     activeUsers = dbHandler.getActiveUser()
@@ -227,5 +225,16 @@ def userSchedules():
         activeUser = user
     
     schedules = dbHandler.getUserSchedules(activeUser['userID'])
+
+    if request.method == 'POST':
+        inputData = request.form.getlist('scheduleDeletion')
+        print(inputData)
+
+        for input in inputData:
+            dbHandler.deleteSchedule(activeUser['userID'], int(input) - 1, )
+            
+
+        return redirect(url_for('userSchedules'))
+
 
     return render_template('userSchedules.html', schedules=schedules)
