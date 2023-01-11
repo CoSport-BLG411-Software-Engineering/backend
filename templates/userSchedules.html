@@ -5,15 +5,15 @@
   </head>
   <body style="text-align: center;">
     <form action="{{url_for('userMainScreen')}}" method="GET">
-      <div class="container">
-        <h1>You can select a gym.</h1>
-        <h1>Choose what you want!</h1>
+      <div class="container" style="background-color: #D1F6F9;">
+        <h1>Your scheduled.</h1>
+        <h1>Gym days</h1>
         <br><br>
         {% for schedule in schedules %}
             <p>{{ schedule['scheduleDay'], schedule['scheduleTime'] }}</option>
         {% endfor %}
         <div>
-            <button type="Submit">Select</button>
+            <button type="Submit" style="background-color: #D1F6F9;">Select</button>
         </div>
       </div>
     </form>

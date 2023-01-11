@@ -9,7 +9,7 @@
         <h1>You can select a gym.</h1>
         <h1>Choose what you want!</h1>
         <br><br>
-        <select id ="standart-select"  name="daySelection" class="Input">
+        <select id ="standart-select"  name="daySelection" class="Input" style="background-color: #D1F6F9;">
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
             <option value="Wednesday">Wednesday</option>
@@ -19,7 +19,7 @@
             <option value="Sunday">Sunday</option>
         </select>
         <br><br>
-        <select id ="standart-select"  name="timeSelection" class="Input">
+        <select id ="standart-select"  name="timeSelection" class="Input" style="background-color: #D1F6F9; size-adjust: auto;">
             
             <option value="06.00">06.00</option>
             <option value="07.00">07.00</option>
@@ -42,20 +42,20 @@
             <option value="00.00">00.00</option>
         </select>
         <br><br>
-        <select id ="standart-select"  name="ptSelection" class="Input">
+        <select id ="standart-select"  name="ptSelection" class="Input" style="background-color: #D1F6F9;">
           {% for personalTrainer in personalTrainers %}
             <option value="{{ personalTrainer['ptId'] }}"> {{ personalTrainer['ptName'] , personalTrainer['ptSurname'], personalTrainer['ptProfession'] }} </option>
           {% endfor %}
         </select>
         <br><br>
-        <select id ="standart-select"  name="facilitySelection" class="Input">
+        <select id ="standart-select"  name="facilitySelection" class="Input" style="background-color: #D1F6F9;">
             {% for facility in facilities %}
               <option value="{{ facility['facilityID'] }}"> {{facility['facilityType'] }} </option>
             {% endfor %}
         </select>
         <br><br>
         <div>
-            <button type="Submit">Select</button>
+            <button type="Submit" style="background-color: #D1F6F9;">Select</button>
         </div>
       </div>
     </form>
